@@ -3,7 +3,7 @@
     <extensions>
         <entry key="AutoNetkit.enable_cdp" type="Boolean">true</entry>
     </extensions>
-    <node name="iosv-1" type="SIMPLE" subtype="IOSv" location="186,264" ipv4="192.168.0.1">
+    <node name="galway" type="SIMPLE" subtype="IOSv" location="186,264" ipv4="192.168.0.1">
         <extensions>
             <entry key="config" type="string">! IOS Config generated on 2015-03-07 18:32
 ! by autonetkit_0.13.3
@@ -96,7 +96,7 @@ end
         </extensions>
         <interface id="0" name="GigabitEthernet0/1" ipv4="10.0.0.5" netPrefixLenV4="30"/>
     </node>
-    <node name="iosv-2" type="SIMPLE" subtype="IOSv" location="484,262" ipv4="192.168.0.2">
+    <node name="dublin" type="SIMPLE" subtype="IOSv" location="484,262" ipv4="192.168.0.2">
         <extensions>
             <entry key="config" type="string">! IOS Config generated on 2015-03-07 18:32
 ! by autonetkit_0.13.3
