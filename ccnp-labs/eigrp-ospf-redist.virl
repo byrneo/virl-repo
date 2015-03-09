@@ -1,410 +1,813 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<topology xmlns="http://www.cisco.com/VIRL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" simulationEngine="OPENSTACK" schemaVersion="0.9" xsi:schemaLocation="http://www.cisco.com/VIRL https://raw.github.com/CiscoVIRL/schema/v0.9/virl.xsd">
+<topology xmlns="http://www.cisco.com/VIRL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" schemaVersion="0.9" simulationEngine="OPENSTACK" xsi:schemaLocation="http://www.cisco.com/VIRL https://raw.github.com/CiscoVIRL/schema/v0.9/virl.xsd">
     <extensions>
-        <entry type="Boolean" key="AutoNetkit.enable_routing">false</entry>
-        <entry type="Boolean" key="AutoNetkit.enable_cdp">true</entry>
+        <entry key="AutoNetkit.enable_routing" type="Boolean">false</entry>
+        <entry key="AutoNetkit.enable_cdp" type="Boolean">true</entry>
     </extensions>
-    <node ipv4="192.168.0.1" location="93,159" subtype="IOSv" type="SIMPLE" name="R1">
+    <node name="R1" type="SIMPLE" subtype="IOSv" location="93,159" ipv4="192.168.0.1">
         <extensions>
-            <entry type="string" key="config">! IOS Config generated on 2015-03-09 19:22
-! by autonetkit_0.13.3
+            <entry key="config" type="string">!
+! Last configuration change at 20:28:19 UTC Mon Mar 9 2015
+!
+version 15.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
 !
 hostname R1
+!
 boot-start-marker
 boot-end-marker
+!
+!
+enable password cisco
 !
 no aaa new-model
 !
 !
+!
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+no ip domain lookup
 ip cef
 ipv6 unicast-routing
 ipv6 cef
 !
-!
-service timestamps debug datetime msec
-service timestamps log datetime msec
-no service password-encryption
-no service config
-enable password cisco
-ip classless
-ip subnet-zero
-no ip domain lookup
-line vty 0 4
- transport input ssh telnet
- exec-timeout 720 0
- password cisco
- login
-line con 0
- password cisco
+multilink bundle-name authenticated
 !
 !
-cdp run
+cts logging verbose
+!
+!
+!
+redundancy
+!
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
 !
 !
 interface Loopback0
-  description Loopback
-  ip address 192.168.0.1 255.255.255.255
+ description Loopback
+ ip address 1.1.1.1 255.255.255.0
+ ip ospf network point-to-point
 !
 interface GigabitEthernet0/0
-  description OOB Management
-  ! Configured on launch
-  no ip address
-  cdp enable
-  duplex auto
-  speed auto
-  no shutdown
+ description OOB Management
+ ip address 10.255.0.32 255.255.0.0
+ duplex auto
+ speed auto
+ media-type rj45
 !
 interface GigabitEthernet0/1
-  description to R2
-  ip address 10.0.0.5 255.255.255.252
-  cdp enable
-  duplex auto
-  speed auto
-  no shutdown
+ description to R2
+ ip address 10.12.0.1 255.255.255.0
+ duplex auto
+ speed auto
+ media-type rj45
+!
+router ospf 1
+ network 1.1.1.1 0.0.0.0 area 0
+ network 10.12.0.1 0.0.0.0 area 0
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
 !
 !
 !
 !
+control-plane
 !
-</entry>
-            <entry type="string" key="AutoNetkit.mgmt_ip"></entry>
+banner exec `
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************`
+banner incoming `
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************`
+banner login `
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************`
+!
+line con 0
+ password cisco
+line aux 0
+line vty 0 4
+ exec-timeout 720 0
+ password cisco
+ login
+ transport input telnet ssh
+!
+no scheduler allocate
+!
+end</entry>
+            <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
         </extensions>
-        <interface netPrefixLenV4="30" ipv4="10.0.0.5" name="GigabitEthernet0/1" id="0"/>
+        <interface id="0" name="GigabitEthernet0/1" ipv4="10.0.0.5" netPrefixLenV4="30"/>
     </node>
-    <node ipv4="192.168.0.2" location="209,159" subtype="IOSv" type="SIMPLE" name="R2">
+    <node name="R2" type="SIMPLE" subtype="IOSv" location="209,159" ipv4="192.168.0.2">
         <extensions>
-            <entry type="string" key="config">! IOS Config generated on 2015-03-09 19:22
-! by autonetkit_0.13.3
+            <entry key="config" type="string">!
+version 15.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
 !
 hostname R2
+!
 boot-start-marker
 boot-end-marker
+!
+!
+enable password cisco
 !
 no aaa new-model
 !
 !
+!
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+no ip domain lookup
 ip cef
 ipv6 unicast-routing
 ipv6 cef
 !
+multilink bundle-name authenticated
 !
-service timestamps debug datetime msec
-service timestamps log datetime msec
-no service password-encryption
-no service config
-enable password cisco
-ip classless
-ip subnet-zero
-no ip domain lookup
+!
+cts logging verbose
+!
+!
+!
+redundancy
+!
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface GigabitEthernet0/0
+ description OOB Management
+ ip address 10.255.0.33 255.255.0.0
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/1
+ description to R1
+ ip address 10.12.0.2 255.255.255.0
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/2
+ description to R3
+ bandwidth 256
+ ip address 10.23.0.2 255.255.255.0
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/3
+ description to R4
+ bandwidth 64
+ ip address 10.24.0.2 255.255.255.0
+ duplex auto
+ speed auto
+ media-type rj45
+!
+router ospf 1
+ network 10.12.0.0 0.0.255.255 area 0
+ network 10.23.0.0 0.0.255.255 area 23
+ network 10.24.0.0 0.0.255.255 area 24
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+!
+!
+!
+!
+control-plane
+!
+banner exec `
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************`
+banner incoming `
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************`
+banner login `
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************`
+!
+line con 0
+ password cisco
+line aux 0
 line vty 0 4
- transport input ssh telnet
  exec-timeout 720 0
  password cisco
  login
-line con 0
- password cisco
+ transport input telnet ssh
 !
+no scheduler allocate
 !
-cdp run
-!
-!
-interface Loopback0
-  description Loopback
-  ip address 192.168.0.2 255.255.255.255
-!
-interface GigabitEthernet0/0
-  description OOB Management
-  ! Configured on launch
-  no ip address
-  cdp enable
-  duplex auto
-  speed auto
-  no shutdown
-!
-interface GigabitEthernet0/1
-  description to R1
-  ip address 10.0.0.6 255.255.255.252
-  cdp enable
-  duplex auto
-  speed auto
-  no shutdown
-!
-interface GigabitEthernet0/2
-  description to R3
-  ip address 10.0.0.9 255.255.255.252
-  cdp enable
-  duplex auto
-  speed auto
-  no shutdown
-!
-interface GigabitEthernet0/3
-  description to R4
-  ip address 10.0.0.13 255.255.255.252
-  cdp enable
-  duplex auto
-  speed auto
-  no shutdown
-!
-!
-!
-!
-!
-</entry>
-            <entry type="string" key="AutoNetkit.mgmt_ip"></entry>
+end</entry>
+            <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
         </extensions>
-        <interface netPrefixLenV4="30" ipv4="10.0.0.6" name="GigabitEthernet0/1" id="0"/>
-        <interface netPrefixLenV4="30" ipv4="10.0.0.9" name="GigabitEthernet0/2" id="1"/>
-        <interface netPrefixLenV4="30" ipv4="10.0.0.13" name="GigabitEthernet0/3" id="2"/>
+        <interface id="0" name="GigabitEthernet0/1" ipv4="10.0.0.6" netPrefixLenV4="30"/>
+        <interface id="1" name="GigabitEthernet0/2" ipv4="10.0.0.9" netPrefixLenV4="30"/>
+        <interface id="2" name="GigabitEthernet0/3" ipv4="10.0.0.13" netPrefixLenV4="30"/>
     </node>
-    <node ipv4="192.168.0.3" location="316,109" subtype="IOSv" type="SIMPLE" name="R3">
+    <node name="R3" type="SIMPLE" subtype="IOSv" location="316,109" ipv4="192.168.0.3">
         <extensions>
-            <entry type="string" key="config">! IOS Config generated on 2015-03-09 19:22
-! by autonetkit_0.13.3
+            <entry key="config" type="string">!
+! Last configuration change at 21:15:29 UTC Mon Mar 9 2015
+!
+version 15.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
 !
 hostname R3
+!
 boot-start-marker
 boot-end-marker
+!
+!
+enable password cisco
 !
 no aaa new-model
 !
 !
+!
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+no ip domain lookup
 ip cef
 ipv6 unicast-routing
 ipv6 cef
 !
-!
-service timestamps debug datetime msec
-service timestamps log datetime msec
-no service password-encryption
-no service config
-enable password cisco
-ip classless
-ip subnet-zero
-no ip domain lookup
-line vty 0 4
- transport input ssh telnet
- exec-timeout 720 0
- password cisco
- login
-line con 0
- password cisco
+multilink bundle-name authenticated
 !
 !
-cdp run
+cts logging verbose
 !
 !
-interface Loopback0
-  description Loopback
-  ip address 192.168.0.3 255.255.255.255
+!
+redundancy
+!
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
 !
 interface GigabitEthernet0/0
-  description OOB Management
-  ! Configured on launch
-  no ip address
-  cdp enable
-  duplex auto
-  speed auto
-  no shutdown
+ description OOB Management
+ ip address 10.255.0.34 255.255.0.0
+ duplex auto
+ speed auto
+ media-type rj45
 !
 interface GigabitEthernet0/1
-  description to R4
-  ip address 10.0.0.17 255.255.255.252
-  cdp enable
-  duplex auto
-  speed auto
-  no shutdown
+ description to R4
+ ip address 10.34.0.3 255.255.255.0
+ duplex auto
+ speed auto
+ media-type rj45
 !
 interface GigabitEthernet0/2
-  description to R2
-  ip address 10.0.0.10 255.255.255.252
-  cdp enable
-  duplex auto
-  speed auto
-  no shutdown
+ description to R2
+ bandwidth 256
+ ip address 10.23.0.3 255.255.255.0
+ duplex auto
+ speed auto
+ media-type rj45
 !
 interface GigabitEthernet0/3
-  description GigabitEthernet0/3
-  no ip address
-  cdp enable
-  duplex auto
-  speed auto
-  no shutdown
+ description GigabitEthernet0/3
+ no ip address
+ duplex auto
+ speed auto
+ media-type rj45
+!
+!
+router eigrp 1
+ network 10.34.0.0 0.0.255.255
+ redistribute ospf 1 metric 1 1 1 1 1
+!
+router ospf 1
+ redistribute eigrp 1 subnets
+ network 10.23.0.0 0.0.255.255 area 23
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
 !
 !
 !
 !
+control-plane
 !
-</entry>
-            <entry type="string" key="AutoNetkit.mgmt_ip"></entry>
+banner exec `
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************`
+banner incoming `
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************`
+banner login `
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************`
+!
+line con 0
+ password cisco
+line aux 0
+line vty 0 4
+ exec-timeout 720 0
+ password cisco
+ login
+ transport input telnet ssh
+!
+no scheduler allocate
+!
+end</entry>
+            <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
         </extensions>
-        <interface netPrefixLenV4="30" ipv4="10.0.0.17" name="GigabitEthernet0/1" id="0"/>
-        <interface netPrefixLenV4="30" ipv4="10.0.0.10" name="GigabitEthernet0/2" id="1"/>
-        <interface name="GigabitEthernet0/3" id="2"/>
+        <interface id="0" name="GigabitEthernet0/1" ipv4="10.0.0.17" netPrefixLenV4="30"/>
+        <interface id="1" name="GigabitEthernet0/2" ipv4="10.0.0.10" netPrefixLenV4="30"/>
+        <interface id="2" name="GigabitEthernet0/3"/>
     </node>
-    <node ipv4="192.168.0.4" location="322,221" subtype="IOSv" type="SIMPLE" name="R4">
+    <node name="R4" type="SIMPLE" subtype="IOSv" location="322,221" ipv4="192.168.0.4">
         <extensions>
-            <entry type="string" key="config">! IOS Config generated on 2015-03-09 19:22
-! by autonetkit_0.13.3
+            <entry key="config" type="string">!
+! Last configuration change at 21:22:04 UTC Mon Mar 9 2015
+!
+version 15.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
 !
 hostname R4
+!
 boot-start-marker
 boot-end-marker
+!
+!
+enable password cisco
 !
 no aaa new-model
 !
 !
+!
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+no ip domain lookup
 ip cef
 ipv6 unicast-routing
 ipv6 cef
 !
-!
-service timestamps debug datetime msec
-service timestamps log datetime msec
-no service password-encryption
-no service config
-enable password cisco
-ip classless
-ip subnet-zero
-no ip domain lookup
-line vty 0 4
- transport input ssh telnet
- exec-timeout 720 0
- password cisco
- login
-line con 0
- password cisco
+multilink bundle-name authenticated
 !
 !
-cdp run
+cts logging verbose
 !
 !
-interface Loopback0
-  description Loopback
-  ip address 192.168.0.4 255.255.255.255
+!
+redundancy
+!
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
 !
 interface GigabitEthernet0/0
-  description OOB Management
-  ! Configured on launch
-  no ip address
-  cdp enable
-  duplex auto
-  speed auto
-  no shutdown
+ description OOB Management
+ ip address 10.255.0.35 255.255.0.0
+ duplex auto
+ speed auto
+ media-type rj45
 !
 interface GigabitEthernet0/1
-  description to R3
-  ip address 10.0.0.18 255.255.255.252
-  cdp enable
-  duplex auto
-  speed auto
-  no shutdown
+ description to R3
+ ip address 10.34.0.4 255.255.255.0
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/2
+ bandwidth 64
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+ media-type rj45
 !
 interface GigabitEthernet0/3
-  description to R2
-  ip address 10.0.0.14 255.255.255.252
-  cdp enable
-  duplex auto
-  speed auto
-  no shutdown
+ description to R2
+ bandwidth 64
+ ip address 10.24.0.4 255.255.255.0
+ duplex auto
+ speed auto
+ media-type rj45
 !
 interface GigabitEthernet0/4
-  description to R5
-  ip address 10.0.0.21 255.255.255.252
-  cdp enable
-  duplex auto
-  speed auto
-  no shutdown
+ description to R5
+ ip address 10.45.0.4 255.255.255.0
+ duplex auto
+ speed auto
+ media-type rj45
+!
+!
+router eigrp 1
+ network 10.34.0.0 0.0.255.255
+ network 10.45.0.0 0.0.255.255
+ redistribute ospf 1 metric 1 1 1 1 1
+!
+router ospf 1
+ redistribute eigrp 1 subnets
+ network 10.24.0.0 0.0.255.255 area 24
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
 !
 !
 !
 !
+control-plane
 !
-</entry>
-            <entry type="string" key="AutoNetkit.mgmt_ip"></entry>
+banner exec `
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************`
+banner incoming `
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************`
+banner login `
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************`
+!
+line con 0
+ password cisco
+line aux 0
+line vty 0 4
+ exec-timeout 720 0
+ password cisco
+ login
+ transport input telnet ssh
+!
+no scheduler allocate
+!
+end</entry>
+            <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
         </extensions>
-        <interface netPrefixLenV4="30" ipv4="10.0.0.18" name="GigabitEthernet0/1" id="0"/>
-        <interface netPrefixLenV4="30" ipv4="10.0.0.14" name="GigabitEthernet0/3" id="2"/>
-        <interface netPrefixLenV4="30" ipv4="10.0.0.21" name="GigabitEthernet0/4" id="3"/>
+        <interface id="0" name="GigabitEthernet0/1" ipv4="10.0.0.18" netPrefixLenV4="30"/>
+        <interface id="2" name="GigabitEthernet0/3" ipv4="10.0.0.14" netPrefixLenV4="30"/>
+        <interface id="3" name="GigabitEthernet0/4" ipv4="10.0.0.21" netPrefixLenV4="30"/>
     </node>
-    <node ipv4="192.168.0.5" location="422,167" subtype="IOSv" type="SIMPLE" name="R5">
+    <node name="R5" type="SIMPLE" subtype="IOSv" location="422,167" ipv4="192.168.0.5">
         <extensions>
-            <entry type="string" key="config">! IOS Config generated on 2015-03-09 19:22
-! by autonetkit_0.13.3
+            <entry key="config" type="string">!
+! Last configuration change at 21:19:10 UTC Mon Mar 9 2015
+!
+version 15.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
 !
 hostname R5
+!
 boot-start-marker
 boot-end-marker
+!
+!
+enable password cisco
 !
 no aaa new-model
 !
 !
+!
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+no ip domain lookup
 ip cef
 ipv6 unicast-routing
 ipv6 cef
 !
-!
-service timestamps debug datetime msec
-service timestamps log datetime msec
-no service password-encryption
-no service config
-enable password cisco
-ip classless
-ip subnet-zero
-no ip domain lookup
-line vty 0 4
- transport input ssh telnet
- exec-timeout 720 0
- password cisco
- login
-line con 0
- password cisco
+multilink bundle-name authenticated
 !
 !
-cdp run
+cts logging verbose
+!
+!
+!
+redundancy
+!
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
 !
 !
 interface Loopback0
-  description Loopback
-  ip address 192.168.0.5 255.255.255.255
+ description Loopback
+ ip address 5.5.5.5 255.255.255.0
 !
 interface GigabitEthernet0/0
-  description OOB Management
-  ! Configured on launch
-  no ip address
-  cdp enable
-  duplex auto
-  speed auto
-  no shutdown
+ description OOB Management
+ ip address 10.255.0.36 255.255.0.0
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/1
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/2
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+ media-type rj45
 !
 interface GigabitEthernet0/3
-  description GigabitEthernet0/3
-  no ip address
-  cdp enable
-  duplex auto
-  speed auto
-  no shutdown
+ description GigabitEthernet0/3
+ no ip address
+ duplex auto
+ speed auto
+ media-type rj45
 !
 interface GigabitEthernet0/4
-  description to R4
-  ip address 10.0.0.22 255.255.255.252
-  cdp enable
-  duplex auto
-  speed auto
-  no shutdown
+ description to R4
+ ip address 10.45.0.5 255.255.255.0
+ duplex auto
+ speed auto
+ media-type rj45
+!
+!
+router eigrp 1
+ network 0.0.0.0
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
 !
 !
 !
 !
+control-plane
 !
-</entry>
-            <entry type="string" key="AutoNetkit.mgmt_ip"></entry>
+banner exec `
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************`
+banner incoming `
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************`
+banner login `
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************`
+!
+line con 0
+ password cisco
+line aux 0
+line vty 0 4
+ exec-timeout 720 0
+ password cisco
+ login
+ transport input telnet ssh
+!
+no scheduler allocate
+!
+end</entry>
+            <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
         </extensions>
-        <interface name="GigabitEthernet0/3" id="2"/>
-        <interface netPrefixLenV4="30" ipv4="10.0.0.22" name="GigabitEthernet0/4" id="3"/>
+        <interface id="2" name="GigabitEthernet0/3"/>
+        <interface id="3" name="GigabitEthernet0/4" ipv4="10.0.0.22" netPrefixLenV4="30"/>
     </node>
-    <connection src="/virl:topology/virl:node[1]/virl:interface[1]" dst="/virl:topology/virl:node[2]/virl:interface[1]"/>
-    <connection src="/virl:topology/virl:node[2]/virl:interface[2]" dst="/virl:topology/virl:node[3]/virl:interface[2]"/>
-    <connection src="/virl:topology/virl:node[2]/virl:interface[3]" dst="/virl:topology/virl:node[4]/virl:interface[2]"/>
-    <connection src="/virl:topology/virl:node[3]/virl:interface[1]" dst="/virl:topology/virl:node[4]/virl:interface[1]"/>
-    <connection src="/virl:topology/virl:node[4]/virl:interface[3]" dst="/virl:topology/virl:node[5]/virl:interface[2]"/>
+    <connection dst="/virl:topology/virl:node[2]/virl:interface[1]" src="/virl:topology/virl:node[1]/virl:interface[1]"/>
+    <connection dst="/virl:topology/virl:node[3]/virl:interface[2]" src="/virl:topology/virl:node[2]/virl:interface[2]"/>
+    <connection dst="/virl:topology/virl:node[4]/virl:interface[2]" src="/virl:topology/virl:node[2]/virl:interface[3]"/>
+    <connection dst="/virl:topology/virl:node[4]/virl:interface[1]" src="/virl:topology/virl:node[3]/virl:interface[1]"/>
+    <connection dst="/virl:topology/virl:node[5]/virl:interface[2]" src="/virl:topology/virl:node[4]/virl:interface[3]"/>
 </topology>
